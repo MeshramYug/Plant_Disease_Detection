@@ -43,8 +43,8 @@ Plant Disease Detection is a deep learning system designed to help farmers and g
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/Plant-Disease-Detection.git
-   cd Plant-Disease-Detection
+   git clone https://github.com/MeshramYug/Plant_Disease_Detection.git
+   cd Plant_Disease_Detection
    ```
 
 2. **Create and activate a virtual environment**:
