@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block pagetitle %}{{title}} - Result{% endblock pagetitle %}
+{% block body %}
+
+{% set is_healthy = pred in [3, 5, 7, 11, 15, 18, 20, 23, 24, 25, 28, 38] %}
+{% set title_parts = title.split(' : ') %}
+{% set plant_name = title_parts[0] %}
+{% if title_parts|length > 1 %}
+{% set disease_name = title_parts[1] %}
+{% elif is_healthy %}
+{% set disease_name = 'Healthy' %}
+{% else %}
+{% set disease_name = 'Unknown Issue' %}
+{% endif %}
+
+<div class="container py-5 reveal">
+    <div class="row mb-4 align-items-end">
+        <div class="col-md-8">
+            <a href="/index" class="text-muted text-decoration-none mb-2 d-inline-block"><i class="bi bi-arrow-left"></i> Analyze another image</a>
+            <h1 class="display-5 fw-bolder mb-0">Analysis Result</h1>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <button onclick="window.print()" class="btn btn-outline-secondary rounded-pill px-4"><i class="bi bi-printer me-2"></i> Print Report</button>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Main Image and Status Card -->
+        <div class="col-lg-4">
+            <div class="card-surface p-4 h-100 d-flex flex-column">
+                <div class="position-relative mb-4">
+                    <img src="{{image_url}}" class="img-fluid rounded-4 w-100 shadow-sm" style="object-fit: cover; aspect-ratio: 1/1;" alt="Analyzed leaf">
+                    
+                    {% if is_healthy %}
+                    <div class="position-absolute top-0 end-0 m-3 badge bg-success fs-6 rounded-pill shadow-sm px-3 py-2">
+                        <i class="bi bi-check-circle-fill me-1"></i> Healthy
+                    </div>
+                    {% else %}
+                    <div class="position-absolute top-0 end-0 m-3 badge bg-danger fs-6 rounded-pill shadow-sm px-3 py-2">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i> Severe
+                    </div>
+                    {% endif %}
+                </div>
+
+                <h3 class="fw-bold mb-1">{{ plant_name }}</h3>
+                <h5 class="{% if is_healthy %}text-success{% else %}text-danger{% endif %} mb-4">{{ disease_name }}</h5>
+
+                <div class="mt-auto bg-light rounded-4 p-3 border">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted fw-bold small">AI Confidence</span>
+                        <span class="fw-bold">{{ confidence }}%</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar {% if is_healthy %}bg-success{% else %}bg-danger{% endif %}" role="progressbar" style="width: {{ confidence }}%" aria-valuenow="{{ confidence }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Details Column -->
+        <div class="col-lg-8">
+            <div class="row g-4 h-100">
+                
+                <!-- Symptoms & Causes -->
+                <div class="col-12">
+                    <div class="card-surface p-4 p-md-5 h-100 border-0">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle me-3" style="width: 48px; height: 48px; font-size: 1.25rem;">
+                                <i class="bi bi-info-circle-fill"></i>
+                            </div>
+                            <h4 class="fw-bold mb-0">
+                                {% if is_healthy %} Plant Health Overview {% else %} Symptoms & Causes {% endif %}
+                            </h4>
+                        </div>
+                        <p class="fs-5 text-muted mb-0" style="line-height: 1.8;">{{desc}}</p>
+                    </div>
+                </div>
+
+                <!-- Treatment & Prevention -->
+                <div class="col-12">
+                    <div class="card-surface p-4 p-md-5 h-100 border-0" style="background: var(--emerald-light);">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-success text-white rounded-circle me-3 shadow-sm" style="width: 48px; height: 48px; font-size: 1.25rem;">
+                                <i class="bi bi-shield-fill-check"></i>
+                            </div>
+                            <h4 class="fw-bold mb-0 text-forest">
+                                {% if is_healthy %} Tips to Keep it Healthy {% else %} Treatment & Prevention Tips {% endif %}
+                            </h4>
+                        </div>
+                        <p class="fs-5 text-forest mb-0" style="line-height: 1.8; opacity: 0.9;">{{prevent}}</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommendations Section -->
+    {% if pred != 4 %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="fw-bold mb-4">Recommended for you</h3>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card-surface p-4 text-center">
+                <span class="badge bg-secondary mb-3 rounded-pill">
+                    {% if is_healthy %} Recommended Fertilizer {% else %} Recommended Supplement {% endif %}
+                </span>
+                <div class="bg-white rounded-4 p-3 mb-4 shadow-sm mx-auto" style="width: fit-content;">
+                    <img src="{{simage}}" alt="Product Image" style="height: 200px; object-fit: contain;">
+                </div>
+                <h5 class="fw-bold mb-3">{{sname}}</h5>
+                <a target="_blank" href="{{buy_link}}" class="btn btn-success-soft w-100">
+                    <i class="bi bi-cart3 me-2"></i> Buy Product
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock body %}

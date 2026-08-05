@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block pagetitle %}Plant Disease Detection{% endblock pagetitle %}
+{% block body %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <section class="row align-items-center g-5 py-5 reveal">
+        <div class="col-lg-6">
+            <div class="hero-badge">
+                <i class="bi bi-stars"></i> Smart plant disease detection
+            </div>
+            <h1 class="display-3 fw-bolder mb-4">Identify plant issues <br/><span style="color: var(--emerald);">before they spread.</span></h1>
+            <p class="lead text-muted mb-5 pe-lg-4">Upload a leaf image and let PlantCare AI analyze it in seconds. Receive quick diagnosis, actionable prevention tips, and smart product recommendations.</p>
+            <div class="d-flex gap-3 flex-wrap">
+                <a href="/index" class="btn btn-success-soft btn-lg">Try the AI Engine <i class="bi bi-arrow-right ms-2"></i></a>
+                <a href="/market" class="btn btn-outline-success btn-lg">Explore supplements</a>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="position-relative reveal" style="transition-delay: 0.2s;">
+                <div class="position-absolute top-0 end-0 bg-emerald rounded-circle" style="width: 300px; height: 300px; filter: blur(100px); opacity: 0.2; transform: translate(20%, -20%); z-index: -1;"></div>
+                <div class="card-surface p-2 border-0 shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=800&q=80" class="img-fluid rounded-4 w-100" style="object-fit: cover; height: 450px;" alt="Healthy plants" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="row g-4 py-5 reveal">
+        <div class="col-md-4">
+            <div class="card-surface p-4 h-100 border-0 text-center text-md-start">
+                <div class="mb-4 d-inline-flex align-items-center justify-content-center" style="width: 56px; height: 56px; border-radius: 16px; background: var(--emerald-light); color: var(--emerald-dark); font-size: 1.5rem;">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                </div>
+                <h4 class="fw-bold mb-3">Instant insights</h4>
+                <p class="text-muted mb-0">Fast analysis powered by PyTorch models helps gardeners and growers spot problems early.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-surface p-4 h-100 border-0 text-center text-md-start">
+                <div class="mb-4 d-inline-flex align-items-center justify-content-center" style="width: 56px; height: 56px; border-radius: 16px; background: var(--emerald-light); color: var(--emerald-dark); font-size: 1.5rem;">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <h4 class="fw-bold mb-3">Prevention tips</h4>
+                <p class="text-muted mb-0">Receive practical steps and remedies to reduce disease spread and protect crops.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-surface p-4 h-100 border-0 text-center text-md-start">
+                <div class="mb-4 d-inline-flex align-items-center justify-content-center" style="width: 56px; height: 56px; border-radius: 16px; background: var(--emerald-light); color: var(--emerald-dark); font-size: 1.5rem;">
+                    <i class="bi bi-bag-heart-fill"></i>
+                </div>
+                <h4 class="fw-bold mb-3">Smart recommendations</h4>
+                <p class="text-muted mb-0">Find useful product suggestions and fertilizers tailored to the disease result.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Crops -->
+    <section class="py-5 reveal">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold display-6 mb-3">Supported crops</h2>
+            <p class="text-muted fs-5">A growing library of common fruits and vegetables for disease detection.</p>
+        </div>
+        <div class="row g-4">
+            {% set crops = [
+                ('Apple', 'https://images.unsplash.com/photo-1560806887-1e4cd0b6fac6?auto=format&fit=crop&w=600&q=80'),
+                ('Blueberry', 'https://images.unsplash.com/photo-1590119851609-b7b51b73e510?auto=format&fit=crop&w=600&q=80'),
+                ('Cherry', 'https://images.unsplash.com/photo-1528821128474-27f963b062bf?auto=format&fit=crop&w=600&q=80'),
+                ('Corn', 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=600&q=80'),
+                ('Grape', 'https://images.unsplash.com/photo-1596369528641-7667ff4a68cd?auto=format&fit=crop&w=600&q=80'),
+                ('Tomato', 'https://images.unsplash.com/photo-1592841200221-a6898f307baa?auto=format&fit=crop&w=600&q=80')
+            ] %}
+            {% for name, image in crops %}
+            <div class="col-sm-6 col-md-4">
+                <div class="card-surface p-2 text-center h-100 border-0 group" style="cursor: pointer;">
+                    <div class="overflow-hidden rounded-4 mb-3" style="height: 200px;">
+                        <img src="{{ image }}" class="img-fluid w-100 h-100" style="object-fit: cover; transition: transform 0.5s ease;" alt="{{ name }}" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    </div>
+                    <h5 class="fw-bold mb-3">{{ name }}</h5>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock body %}
