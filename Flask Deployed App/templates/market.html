@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block pagetitle %}Supplement Market - PlantCare{% endblock pagetitle %}
+{% block pagetitle %}Supplements & Fertilizer Market - PlantCare AI{% endblock pagetitle %}
 
 {% block body %}
 <div class="container py-5">
@@ -7,8 +7,8 @@
         <div class="hero-badge mx-auto">
             <i class="bi bi-cart-check-fill"></i> PlantCare Store
         </div>
-        <h1 class="display-4 fw-bolder mb-3">Shop Premium <span style="color: var(--emerald);">Supplements</span></h1>
-        <p class="text-muted fs-5 max-w-2xl mx-auto">Find the right fertilizers and treatments tailored for your plants' health needs.</p>
+        <h1 class="display-4 fw-bolder mb-3">Premium Plant <span style="color: var(--emerald-dark);">Supplements</span></h1>
+        <p class="text-muted fs-5 max-w-2xl mx-auto">Select organic remedies, treatments, and bio-fertilizers customized for your plant health needs.</p>
     </div>
 
     <div class="row g-4 reveal" style="transition-delay: 0.1s;">
@@ -18,26 +18,26 @@
         {% set is_healthy = index in [3, 5, 7, 11, 15, 18, 20, 23, 24, 25, 28, 38] %}
         
         <div class="col-sm-6 col-lg-4 col-xl-3">
-            <div class="card-surface p-3 h-100 d-flex flex-column border-0 group" style="cursor: pointer;">
-                <!-- Product Image -->
-                <div class="bg-white rounded-4 p-3 mb-3 text-center position-relative shadow-sm" style="height: 220px;">
-                    <img src="{{ supplement_image[index] }}" class="img-fluid h-100 object-fit-contain" alt="{{ supplement_name[index] }}" style="transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+            <div class="card-surface p-3 h-100 d-flex flex-column border-0 shadow-sm group">
+                <!-- Product Image Container -->
+                <div class="bg-white rounded-4 p-3 mb-3 text-center position-relative shadow-sm border" style="height: 220px; display: flex; align-items: center; justify-content: center;">
+                    <img src="{{ supplement_image[index] }}" class="img-fluid h-100 object-fit-contain" alt="{{ supplement_name[index] }}" style="transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
                     
                     {% if is_healthy %}
-                    <span class="position-absolute top-0 start-0 m-2 badge bg-success text-white rounded-pill px-2 py-1" style="font-size: 0.75rem;"><i class="bi bi-droplet-fill"></i> Fertilizer</span>
+                    <span class="position-absolute top-0 start-0 m-3 badge bg-success text-white rounded-pill px-3 py-1" style="font-size: 0.75rem;"><i class="bi bi-droplet-fill me-1"></i> Fertilizer</span>
                     {% else %}
-                    <span class="position-absolute top-0 start-0 m-2 badge bg-danger text-white rounded-pill px-2 py-1" style="font-size: 0.75rem;"><i class="bi bi-capsule"></i> Treatment</span>
+                    <span class="position-absolute top-0 start-0 m-3 badge bg-danger text-white rounded-pill px-3 py-1" style="font-size: 0.75rem;"><i class="bi bi-capsule me-1"></i> Treatment</span>
                     {% endif %}
                 </div>
                 
-                <!-- Product Details -->
+                <!-- Product Information -->
                 <div class="d-flex flex-column flex-grow-1">
-                    <p class="text-muted small mb-1 fw-bold text-uppercase" style="letter-spacing: 0.5px; font-size: 0.7rem;">For {{ disease[index] }}</p>
-                    <h5 class="fw-bold mb-3" style="font-size: 1.1rem; line-height: 1.4;">{{ supplement_name[index] }}</h5>
+                    <p class="text-muted small mb-1 fw-bold text-uppercase" style="letter-spacing: 0.5px; font-size: 0.72rem; color: var(--emerald-dark);">For {{ disease[index] }}</p>
+                    <h5 class="fw-bold mb-3" style="font-size: 1.05rem; line-height: 1.4; color: var(--forest);">{{ supplement_name[index] }}</h5>
                     
-                    <!-- Buy Button -->
-                    <div class="mt-auto pt-3">
-                        <a target="_blank" href="{{ buy[index] }}" class="btn btn-outline-success w-100 rounded-pill fw-bold">
+                    <!-- View/Buy Button -->
+                    <div class="mt-auto pt-2">
+                        <a target="_blank" href="{{ buy[index] }}" class="btn btn-outline-success w-100 rounded-pill fw-bold py-2">
                             View Product <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.8rem;"></i>
                         </a>
                     </div>

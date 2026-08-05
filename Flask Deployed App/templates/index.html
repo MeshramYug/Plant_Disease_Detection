@@ -1,67 +1,74 @@
 {% extends 'base.html' %}
-{% block pagetitle %}AI Engine - PlantCare{% endblock pagetitle %}
+{% block pagetitle %}AI Engine - Plant Care AI{% endblock pagetitle %}
 
 {% block body %}
 <div class="container py-5">
     <div class="text-center mb-5 reveal">
         <div class="hero-badge mx-auto">
-            <i class="bi bi-cpu-fill"></i> AI-powered diagnosis
+            <i class="bi bi-cpu-fill"></i> PyTorch AI Diagnostic Engine
         </div>
-        <h1 class="display-4 fw-bolder mb-3">Upload a leaf image for <br/><span style="color: var(--emerald);">instant analysis</span></h1>
-        <p class="text-muted fs-5 max-w-2xl mx-auto">Our PyTorch model will inspect the image for signs of disease and provide a detailed health report.</p>
+        <h1 class="display-4 fw-bolder mb-3">Upload a leaf photo for <br/><span class="text-success">instant disease diagnosis</span></h1>
+        <p class="text-muted fs-5 max-w-2xl mx-auto">Select or drag & drop a clear leaf image, or capture directly using your webcam.</p>
     </div>
 
     <section class="row justify-content-center reveal" style="transition-delay: 0.1s;">
         <div class="col-lg-8">
-            <div class="card-surface p-4 p-md-5">
+            <div class="card-surface p-4 p-md-5 border-0 shadow-lg" style="border-radius: 28px;">
                 <form action="/submit" method="POST" enctype="multipart/form-data" id="upload-form">
                     
                     <!-- Drag & Drop Zone -->
                     <div id="drop-zone" class="border border-2 rounded-4 p-5 text-center mb-4 position-relative overflow-hidden" 
-                         style="background: rgba(16, 185, 129, 0.03); border-style: dashed !important; border-color: rgba(16, 185, 129, 0.4) !important; cursor: pointer; transition: all 0.3s ease; min-height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                         style="background: linear-gradient(135deg, rgba(236, 253, 245, 0.6), rgba(209, 250, 229, 0.4)); border-style: dashed !important; border-color: rgba(16, 185, 129, 0.45) !important; cursor: pointer; transition: all 0.3s ease; min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                         
                         <div id="upload-prompt" class="d-flex flex-column align-items-center">
-                            <div class="mb-4 text-emerald" style="font-size: 3.5rem; opacity: 0.8;">
-                                <i class="bi bi-cloud-arrow-up"></i>
+                            <div class="mb-4 text-emerald" style="font-size: 3.8rem; opacity: 0.9; color: var(--emerald);">
+                                <i class="bi bi-cloud-arrow-up-fill"></i>
                             </div>
-                            <h4 class="fw-bold mb-2 text-forest">Click to upload or drag and drop</h4>
-                            <p class="text-muted mb-4">SVG, PNG, JPG or GIF (max. 5MB)</p>
-                            <label for="actual-btn" class="btn btn-success-soft px-4">Browse Files</label>
+                            <h4 class="fw-bold mb-2" style="color: var(--forest);">Click to upload or drag & drop</h4>
+                            <p class="text-muted mb-4 fs-6">Supports PNG, JPG, JPEG or WEBP (max. 10MB)</p>
+                            <label for="actual-btn" class="btn btn-success-soft px-4 py-2">
+                                <i class="bi bi-folder2-open me-2"></i> Browse Files
+                            </label>
                         </div>
 
                         <!-- Image Preview -->
-                        <div id="preview-container" class="d-none position-absolute w-100 h-100 top-0 start-0 bg-white d-flex flex-column align-items-center justify-content-center p-3">
-                            <img id="preview" src="#" alt="Preview" class="img-fluid rounded-3 mb-3 shadow-sm" style="max-height: 200px; object-fit: contain;" />
-                            <p id="file-chosen" class="fw-bold text-forest mb-2 text-truncate w-75 text-center">filename.jpg</p>
-                            <button type="button" id="remove-btn" class="btn btn-sm btn-outline-danger rounded-pill px-3">Remove</button>
+                        <div id="preview-container" class="d-none position-absolute w-100 h-100 top-0 start-0 bg-white d-flex flex-column align-items-center justify-content-center p-4">
+                            <img id="preview" src="#" alt="Leaf Preview" class="img-fluid rounded-4 mb-3 shadow-md" style="max-height: 220px; object-fit: contain;" />
+                            <p id="file-chosen" class="fw-bold text-forest mb-3 text-truncate w-75 text-center" style="color: var(--forest);"></p>
+                            <button type="button" id="remove-btn" class="btn btn-sm btn-outline-danger rounded-pill px-4">
+                                <i class="bi bi-trash3 me-1"></i> Remove Image
+                            </button>
                         </div>
                         
                         <input type="file" id="actual-btn" name="image" accept="image/*" class="d-none" />
                     </div>
 
-                    <!-- Camera UI -->
-                    <div id="camera-container" class="d-none mb-4 p-3 bg-light rounded-4 border">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h5 class="fw-bold m-0"><i class="bi bi-camera-video me-2"></i> Camera</h5>
+                    <!-- Camera Interface -->
+                    <div id="camera-container" class="d-none mb-4 p-4 bg-light rounded-4 border">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold m-0 text-forest"><i class="bi bi-camera-video me-2"></i> Live Camera Capture</h5>
                             <button type="button" id="close-camera-btn" class="btn-close"></button>
                         </div>
-                        <div class="position-relative bg-dark rounded-3 overflow-hidden" style="aspect-ratio: 4/3;">
+                        <div class="position-relative bg-dark rounded-4 overflow-hidden shadow-sm" style="aspect-ratio: 4/3; max-height: 360px;">
                             <video id="camera-feed" class="w-100 h-100 object-fit-cover" autoplay playsinline></video>
                         </div>
                         <div class="text-center mt-3">
-                            <button type="button" id="capture-btn" class="btn btn-success-soft rounded-pill px-4"><i class="bi bi-camera me-2"></i> Capture photo</button>
+                            <button type="button" id="capture-btn" class="btn btn-success-soft rounded-pill px-4">
+                                <i class="bi bi-camera-fill me-2"></i> Take Photo
+                            </button>
                         </div>
                     </div>
 
-                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-                        <button type="button" id="camera-btn" class="btn btn-outline-secondary rounded-pill px-4">
+                    <!-- Actions -->
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 pt-2">
+                        <button type="button" id="camera-btn" class="btn btn-outline-success rounded-pill px-4">
                             <i class="bi bi-camera me-2"></i> Use Camera
                         </button>
                         
-                        <button type="submit" id="submit-btn" class="btn btn-success-soft px-5 py-2 fs-5" disabled>
+                        <button type="submit" id="submit-btn" class="btn btn-success-soft px-5 py-3 fs-5" disabled>
                             <span id="submit-text">Analyze Plant Health <i class="bi bi-magic ms-2"></i></span>
                             <div class="spinner-border spinner-border-sm ms-2 d-none" id="submit-spinner" role="status">
-                                <span class="visually-hidden">Loading...</span>
+                                <span class="visually-hidden">Analyzing...</span>
                             </div>
                         </button>
                     </div>
@@ -88,82 +95,72 @@
     const captureBtn = document.getElementById('capture-btn');
     let stream = null;
 
-    // Drag and Drop Effects
+    function handleFile(file) {
+        if (!file || !file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            preview.src = e.target.result;
+            fileChosen.textContent = file.name;
+            previewContainer.classList.remove('d-none');
+            submitBtn.disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    actualBtn.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFile(e.target.files[0]);
+        }
+    });
+
+    dropZone.addEventListener('click', (e) => {
+        if (e.target !== removeBtn && !previewContainer.contains(e.target)) {
+            actualBtn.click();
+        }
+    });
+
     ['dragenter', 'dragover'].forEach(eventName => {
         dropZone.addEventListener(eventName, (e) => {
             e.preventDefault();
-            dropZone.style.borderColor = 'var(--emerald) !important';
-            dropZone.style.background = 'rgba(16, 185, 129, 0.1)';
+            dropZone.style.background = 'rgba(16, 185, 129, 0.15)';
         });
     });
 
     ['dragleave', 'dragend', 'drop'].forEach(eventName => {
         dropZone.addEventListener(eventName, (e) => {
             e.preventDefault();
-            dropZone.style.borderColor = 'rgba(16, 185, 129, 0.4) !important';
-            dropZone.style.background = 'rgba(16, 185, 129, 0.03)';
+            dropZone.style.background = 'linear-gradient(135deg, rgba(236, 253, 245, 0.6), rgba(209, 250, 229, 0.4))';
         });
     });
 
-    // Handle Drop
     dropZone.addEventListener('drop', (e) => {
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            actualBtn.files = e.dataTransfer.files;
-            updateSelection(actualBtn.files[0]);
-        }
-    });
-
-    // Make entire drop zone clickable, except when preview is showing
-    dropZone.addEventListener('click', (e) => {
-        if (e.target.closest('#remove-btn') || !uploadPrompt.classList.contains('d-flex')) return;
-        actualBtn.click();
-    });
-
-    actualBtn.addEventListener('change', () => {
-        if (actualBtn.files && actualBtn.files[0]) {
-            updateSelection(actualBtn.files[0]);
+        const dt = e.dataTransfer;
+        if (dt.files && dt.files.length > 0) {
+            actualBtn.files = dt.files;
+            handleFile(dt.files[0]);
         }
     });
 
     removeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         actualBtn.value = '';
-        previewContainer.classList.replace('d-flex', 'd-none');
-        uploadPrompt.classList.replace('d-none', 'd-flex');
+        preview.src = '#';
+        previewContainer.classList.add('d-none');
         submitBtn.disabled = true;
     });
 
-    function updateSelection(file) {
-        if (!file.type.startsWith('image/')) {
-            alert('Please select an image file.');
-            return;
-        }
-        fileChosen.textContent = file.name;
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            preview.src = e.target.result;
-            uploadPrompt.classList.replace('d-flex', 'd-none');
-            previewContainer.classList.replace('d-none', 'd-flex');
-            submitBtn.disabled = false;
-        };
-        reader.readAsDataURL(file);
-        
-        // Hide camera if open
-        stopCamera();
-    }
-
-    // Camera Logic
-    async function startCamera() {
-        cameraContainer.classList.remove('d-none');
+    cameraBtn.addEventListener('click', async () => {
         try {
             stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
             cameraFeed.srcObject = stream;
-        } catch (error) {
-            console.error('Camera error:', error);
-            alert('Unable to access camera. Please check permissions.');
-            stopCamera();
+            cameraContainer.classList.remove('d-none');
+            dropZone.classList.add('d-none');
+        } catch (err) {
+            alert('Could not access camera. Please allow camera permissions or upload an image file.');
         }
-    }
+    });
+
+    closeCameraBtn.addEventListener('click', stopCamera);
 
     function stopCamera() {
         if (stream) {
@@ -171,57 +168,30 @@
             stream = null;
         }
         cameraContainer.classList.add('d-none');
+        dropZone.classList.remove('d-none');
     }
 
-    cameraBtn.addEventListener('click', startCamera);
-    closeCameraBtn.addEventListener('click', stopCamera);
-
     captureBtn.addEventListener('click', () => {
-        if (!stream) return;
         const canvas = document.createElement('canvas');
-        canvas.width = cameraFeed.videoWidth;
-        canvas.height = cameraFeed.videoHeight;
+        canvas.width = cameraFeed.videoWidth || 640;
+        canvas.height = cameraFeed.videoHeight || 480;
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(cameraFeed, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(cameraFeed, 0, 0);
         
         canvas.toBlob((blob) => {
-            if (!blob) return;
             const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
-            
-            // Create a new DataTransfer to set the input file
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            actualBtn.files = dataTransfer.files;
-            
-            updateSelection(file);
-        }, 'image/jpeg', 0.9);
+            const container = new DataTransfer();
+            container.items.add(file);
+            actualBtn.files = container.files;
+            handleFile(file);
+            stopCamera();
+        }, 'image/jpeg');
     });
 
-    // Form Submit Animation
     uploadForm.addEventListener('submit', () => {
         submitBtn.disabled = true;
-        document.getElementById('submit-text').textContent = 'Analyzing...';
+        document.getElementById('submit-text').textContent = 'Analyzing Leaf...';
         document.getElementById('submit-spinner').classList.remove('d-none');
-        
-        // Add a scanning animation over the preview
-        if (previewContainer.classList.contains('d-flex')) {
-            const scanner = document.createElement('div');
-            scanner.style.position = 'absolute';
-            scanner.style.top = '0';
-            scanner.style.left = '0';
-            scanner.style.width = '100%';
-            scanner.style.height = '4px';
-            scanner.style.background = 'var(--emerald)';
-            scanner.style.boxShadow = '0 0 10px var(--emerald)';
-            scanner.style.animation = 'scan 2s infinite linear alternate';
-            scanner.id = 'scanner-line';
-            
-            const keyframes = document.createElement('style');
-            keyframes.innerHTML = `@keyframes scan { from { top: 0; } to { top: 100%; } }`;
-            document.head.appendChild(keyframes);
-            
-            previewContainer.appendChild(scanner);
-        }
     });
 </script>
 {% endblock body %}
